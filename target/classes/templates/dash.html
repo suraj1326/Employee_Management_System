@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+        #wrapper {
+            display: flex;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        #sidebar-wrapper {
+            min-height: 100vh;
+            margin-left: -15rem;
+            transition: margin 0.25s ease-out;
+        }
+        #sidebar-wrapper .sidebar-heading {
+            padding: 0.875rem 1.25rem;
+            font-size: 1.2rem;
+        }
+        #sidebar-wrapper .list-group {
+            width: 15rem;
+        }
+        #sidebar-wrapper .list-group-item {
+            transition: background-color 0.2s, color 0.2s;
+        }
+        #sidebar-wrapper .list-group-item:hover {
+            background-color: #555;
+            color: #fff;
+        }
+        #page-content-wrapper {
+            width: 100%;
+        }
+        #wrapper.toggled #sidebar-wrapper {
+            margin-left: 0;
+        }
+        @media (min-width: 768px) {
+            #sidebar-wrapper {
+                margin-left: 0;
+            }
+            #wrapper.toggled #sidebar-wrapper {
+                margin-left: -15rem;
+            }
+        }
+        .navbar-light .navbar-toggler {
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+        .card {
+            margin-top: 20px;
+        }
+        .btn-add-emp {
+            color: #fff;
+            background-color: #28a745;
+            border-color: #28a745;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .btn-add-emp:hover {
+            background-color: #218838;
+            border-color: #1e7e34;
+        }
+    </style>
+</head>
+<body>
+    <div class="d-flex" id="wrapper">
+        <!-- Sidebar -->
+        <div class="bg-dark border-right" id="sidebar-wrapper">
+            <div class="sidebar-heading text-white">Admin Dashboard</div>
+            <div class="list-group list-group-flush">
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Dashboard</a>
+                <a href="" class="list-group-item list-group-item-action bg-dark text-white">Employee</a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Analytics</a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Widgets</a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Forms</a>
+                <a href="#" class="list-group-item list-group-item-action bg-dark text-white">Tables</a>
+            </div>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
+                <button class="btn btn-primary" id="menu-toggle">Toggle Menu</button>
+            </nav>
+            <center>
+            <div class="container-fluid">
+                <h1 class="mt-4">Dashboard</h1>
+                <p><strong>Sahyadri Employee Management System</strong></p>
+
+                <!-- Button to Navigate to Add Employee Page -->
+              
+                    <div class="mb-4">
+                        <a href="/loadEmpSave" class="btn btn-add-emp">Add Emp</a>
+                    </div>
+                </center>
+
+                <!-- Employee Details -->
+                <section>
+                    <div class="container p-5">
+                        <div class="row">
+                            <div class="col-md-10 offset-md-1">
+                                <div class="card">
+                                    <div class="card-header text-center fs-4">Employee Details</div>
+                                    <th:block th:if="${session.msg}">
+                                        <p class="text-center text-success fs-4">[[${session.msg}]]</p>
+                                        <th:block th:text="${@empServiceImpl.removeSessionMessage()}"></th:block>
+                                    </th:block>
+                                    <div class="card-body">
+                                        <table class="table table-striped">
+                                            <thead class="table-dark">
+                                                <tr>
+                                                    <th scope="col">Id</th>
+                                                    <th scope="col">Name</th>
+                                                    <th scope="col">Email</th>
+                                                    <th scope="col">Address</th>
+                                                    <th scope="col">Gender</th>
+                                                    <th scope="col">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="e, c : ${empList}">
+                                                    <th scope="row">[[${c.index + 1}]]</th>
+                                                    <td>[[${e.name}]]</td>
+                                                    <td>[[${e.email}]]</td>
+                                                    <td>[[${e.address}]]</td>
+                                                    <td>[[${e.gender}]]</td>
+                                                    <td>
+                                                        <a th:href="@{'EditEmp/' + ${e.id}}" class="btn btn-sm btn-primary">
+                                                            <i class="fas fa-edit"></i> Edit
+                                                        </a>
+                                                        <a th:href="@{'deleteEmp/' + ${e.id}}" class="btn btn-sm btn-danger">
+                                                            <i class="fas fa-trash"></i> Delete
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script>
+        $("#menu-toggle").click(function(e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("toggled");
+        });
+    </script>
+</body>
+</html>

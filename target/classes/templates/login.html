@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <center><title>Login Page</title>
+
+  <style>
+    body, html {
+      height: 100%;
+      margin: 0;
+    }
+    .loginPage {
+      background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8iUX7nCWbgJ10igTFdxkg7U2-A3GFoLL5XA&s');
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    .loginForm {
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 4.5rem;
+      border-radius: 0.25rem;
+      box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    }
+    .form-control {
+      width: 100%;
+      padding: 0.375rem 0.75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: #495057;
+      background-color: #fff;
+      background-clip: padding-box;
+      border: 1px solid #ced4da;
+      border-radius: 0.25rem;
+    }
+    .btn-success {
+      color: #fff;
+      background-color: #28a745;
+      border-color: #28a745;
+      width: 109%;
+      height: 30;
+      margin-top: 2rem; /* Added margin-top to create space */
+    }
+  </style>
+</head>
+<body>
+  <div class="loginPage">
+    <div class="p-3 rounded w-25 border loginForm">
+      <h2>Login Page</h2>
+      <form id="loginForm">
+        <div class="mb-3">
+          <label for="Email"><strong>Email:</strong></label>
+          <input 
+            type="email" 
+            name="email" 
+            autocomplete="on" 
+            placeholder="Enter Email"
+            class="form-control rounded-0" 
+          />
+        </div>
+        <div class="mb-3">
+          <label for="Password"><strong>Password:</strong></label>
+          <input 
+            type="password" 
+            name="password" 
+            autocomplete="on" 
+            placeholder="Enter Password"
+            class="form-control rounded-0" 
+          />
+        </div>
+        
+        <button class="btn btn-success w-100 rounded-0 mb-3"  type="submit">Login</button>
+      
+      </form>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const values = {
+        email: event.target.email.value,
+        password: event.target.password.value
+      };
+      axios.post('http://localhost:3000/auth/adminlogin', values)
+        .then(result => console.log(result))
+        .catch(error => console.error(error));
+    });
+  </script>
+  </center>
+</body>
+</html>
